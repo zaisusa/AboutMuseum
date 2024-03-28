@@ -10,16 +10,17 @@ public class Floor : MonoBehaviour
     public GameObject FloorOnMap;
 
     [SerializeField] ToggleGroup excursionToggles;
-
+    Toggle activeToggle;
     public void ClosedExc()
     {
-        var activeToggle = excursionToggles.GetFirstActiveToggle();
+        activeToggle = excursionToggles.GetFirstActiveToggle();
         if (activeToggle)
         {
+            
             activeToggle.isOn = false;
             activeToggle.gameObject.GetComponent<ExcursionToggles>().CloseBriefInfo();
         } 
     }
 
-    
+
 }
