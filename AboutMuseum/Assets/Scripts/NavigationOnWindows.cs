@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class NavigationOnWindows : MonoBehaviour
@@ -12,5 +13,6 @@ public class NavigationOnWindows : MonoBehaviour
         NeedWindow.SetActive(true);
         ThisWindow.SetActive(false);
     }
+    
 
 }
