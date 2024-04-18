@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PosterWindowLogic : MonoBehaviour
 {
-    public GameObject Content;
+    [SerializeField] GameObject Content;
     public GameObject[] Excursions;
     [SerializeField] GameObject FilterGroup;
     int CountExc;
@@ -15,12 +15,7 @@ public class PosterWindowLogic : MonoBehaviour
 
     void Start()
     {
-        CountExc = Content.transform.childCount;
-        Excursions = new GameObject[CountExc];
-        for (int i = 0; i < CountExc; i++)
-        {
-            Excursions[i] = Content.transform.GetChild(i).gameObject;
-        }
+        StartCoroutine(GetContentSize());
     }
     public void CloseWindow()
     {
@@ -37,5 +32,9 @@ public class PosterWindowLogic : MonoBehaviour
         ThisWindow.SetActive(false);
     }
 
-
+    IEnumerator GetContentSize()
+    {
+        yield return new WaitForSeconds(1f);
+        Excursions = Content.GetComponent<PosterLoad>().content;
+    }
 }
