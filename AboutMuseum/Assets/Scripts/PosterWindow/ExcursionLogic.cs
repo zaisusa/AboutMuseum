@@ -37,22 +37,24 @@ public class ExcursionLogic : MonoBehaviour
     public GameObject _DateTime;
     public GameObject Cost;
     public GameObject Description;
+
+    private TMP_SIzeFilter FilterSize;
     private void Start()
     {
         thisTransform = GetComponent<RectTransform>();
         GetComponent<Button>().onClick.AddListener(delegate { OpenFullInfo(); });
-        
+        FilterSize = GetComponent<TMP_SIzeFilter>();
     }
     public void OpenFullInfo()
     {
         if (!isOpen)
         {
-            thisTransform.offsetMin = new Vector2(thisTransform.offsetMin.x, thisTransform.offsetMin.y - SizeFull);
+            FilterSize.SetHeight();
             isOpen = true;
         }
         else
         {
-            thisTransform.offsetMin = new Vector2(thisTransform.offsetMin.x, thisTransform.offsetMin.y + SizeFull);
+            FilterSize.SetOldHeight();
             isOpen = false;
         }
 
@@ -78,10 +80,17 @@ public class ExcursionLogic : MonoBehaviour
     }
     IEnumerator LoadPicture(string _urlImage)
     {
-        UnityWebRequest request = UnityWebRequestTexture.GetTexture(_urlImage);
-        yield return request.SendWebRequest();
-        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-        Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-        Image.GetComponent<Image>().sprite = image;
+        if (_urlImage != "")
+        {
+            print("a");
+            UnityWebRequest request = UnityWebRequestTexture.GetTexture(_urlImage);
+            yield return request.SendWebRequest();
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
+            Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Image.GetComponent<Image>().sprite = image;
+        }
+        
+        
+
     }
 }

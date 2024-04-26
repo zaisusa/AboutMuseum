@@ -23,29 +23,20 @@ public class PosterLoad : MonoBehaviour
         {11,"NOVEMBER" },
         {12,"DECEMBER" }
     };
-    DateTime date = DateTime.Now;
     string URL;
 
 
     public GameObject[] content;
     private int SizeContent;
     public GameObject ExcursionExample;
-    private void Awake()
-    {
-        
-    }
-    void Start()
-    {
-        for(int i = 0; i<3; i++)
-        {
-            int month = date.Month;
-            URL = $"http://62.109.23.170:8888/api/poster?month={MonthNamesForRequests[month+i]}";
-            StartCoroutine(LoadPoster(URL, month+i));
-        }
-        
-    }
 
-
+    [SerializeField] FiltersLogic filters;
+    public void LoadOnStart(int Month)
+    {
+        int month = Month;
+        URL = $"http://62.109.23.170:8888/api/poster?month={MonthNamesForRequests[month]}";
+        StartCoroutine(LoadPoster(URL, month));
+    }
     
     void FillingContent(Poster[] posters, int month)
     {
@@ -70,10 +61,11 @@ public class PosterLoad : MonoBehaviour
         {
             content[i] = transform.GetChild(i).gameObject;
         }
-        print(SizeContent);
+        filters.UploadContentList();
     }
     IEnumerator LoadPoster(string _url, int month)
     {
+        
         UnityWebRequest request = UnityWebRequest.Get(_url);
         yield return request.SendWebRequest();
         AllPosters allPosters = JsonUtility.FromJson<AllPosters>(request.downloadHandler.text);

@@ -29,11 +29,13 @@ public class ExcursionToggles : MonoBehaviour
         if (BriefInfoWindow)
         {
             needExposition.SwipeSprite();
+            SwapColorText();
             CloseBriefInfo();
         }
         else
         {
             needExposition.SwipeSprite();
+            SwapColorText();
             OpenBriefInfo();
         }
         //if (ExcursionOnMap.activeSelf)
@@ -68,6 +70,17 @@ public class ExcursionToggles : MonoBehaviour
         textExp = transform.Find("Text (TMP)").GetComponent<TMP_Text>();
         textExp.text = needExposition.expositionInfo.Name;
 
+    }
+    void SwapColorText()
+    {
+        if(textExp.color == Color.black)
+        {
+            textExp.color = Color.white;
+        }
+        else
+        {
+            textExp.color = Color.black;
+        }
     }
     // Update is called once per frame
     
