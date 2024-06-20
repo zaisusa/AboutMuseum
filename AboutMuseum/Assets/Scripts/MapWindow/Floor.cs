@@ -9,8 +9,12 @@ public class Floor : MonoBehaviour
     public bool isOpen = false;
     public GameObject FloorOnMap;
 
-    [SerializeField] ToggleGroup excursionToggles;
+    public ToggleGroup excursionToggles;
     Toggle activeToggle;
+
+    //ƒл€ блокировки активностей на окне
+    [HideInInspector] public GameObject[] ContentOnMap; //Ёкспозиции на карте
+    [HideInInspector] public GameObject[] ContentOnNav; //Ёкспозиции в навигации (правое окно)
     public void ClosedExc()
     {
         activeToggle = excursionToggles.GetFirstActiveToggle();
@@ -20,6 +24,11 @@ public class Floor : MonoBehaviour
             activeToggle.isOn = false;
             activeToggle.gameObject.GetComponent<ExcursionToggles>().CloseBriefInfo();
         } 
+    }
+    private void Start()
+    {
+        ContentOnMap = MapLogic.GetAllChildrens(FloorOnMap);
+        ContentOnNav = MapLogic.GetAllChildrens(excursionToggles.gameObject);
     }
 
 

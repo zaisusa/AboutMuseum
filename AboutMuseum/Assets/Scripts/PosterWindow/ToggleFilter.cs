@@ -5,22 +5,25 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ToggleFilter : MonoBehaviour, ISelectHandler, IDeselectHandler
+public class ToggleFilter : MonoBehaviour, ISelectHandler
 {
     GameObject parent;
     public FiltersLogic filter;
     int Month;
     TMP_Text textName;
+    Toggle item;
     private void Awake()
     {
         parent = transform.parent.gameObject;
         filter = parent.GetComponent<FiltersLogic>();
         textName = transform.Find("Text (TMP)").GetComponent<TMP_Text>();
+        item = GetComponent<Toggle>();
+
     }
     private void Start()
     {
-        
-    }
+        item.onValueChanged.AddListener(delegate { BlackColor(); });
+    }   
     public void SelectMonth(int indexMonth)
     {
         Month = indexMonth;
@@ -28,31 +31,14 @@ public class ToggleFilter : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     public void OnSelect(BaseEventData eventData)
     {
-        print("Я выбран");
         WhiteColor();
         filter.Click(Month);
     }
-    public void OnDeselect(BaseEventData eventData)
-    {
-        
-        BlackColor();
-    }
-    void SwapTextColor()
-    {
-        
-        if(textName.color == Color.black)
-        {
-            textName.color = Color.white;
-        }
-        else
-        {
-            textName.color = Color.black;
-        }
-        
-    }
+
+
     void BlackColor()
     {
-        textName.color = Color.black;
+        if(!item.isOn) textName.color = Color.black;
 
     }
     void WhiteColor()

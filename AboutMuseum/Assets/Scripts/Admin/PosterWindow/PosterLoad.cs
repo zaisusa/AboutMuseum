@@ -34,7 +34,7 @@ public class PosterLoad : MonoBehaviour
     public void LoadOnStart(int Month)
     {
         int month = Month;
-        URL = $"http://62.109.23.170:8888/api/poster?month={MonthNamesForRequests[month]}";
+        URL = $"http://192.168.0.240:8888/api/poster?month={MonthNamesForRequests[month]}";
         StartCoroutine(LoadPoster(URL, month));
     }
     

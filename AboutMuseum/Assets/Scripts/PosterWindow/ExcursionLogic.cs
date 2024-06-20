@@ -82,7 +82,6 @@ public class ExcursionLogic : MonoBehaviour
     {
         if (_urlImage != "")
         {
-            print("a");
             UnityWebRequest request = UnityWebRequestTexture.GetTexture(_urlImage);
             yield return request.SendWebRequest();
             Texture2D texture = DownloadHandlerTexture.GetContent(request);

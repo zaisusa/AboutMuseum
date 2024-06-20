@@ -24,7 +24,7 @@ public class SendReview : MonoBehaviour
     public Valuation markReview;
     public void SendingReview()
     {
-        StartCoroutine(SendReviewOnAPI("http://62.109.23.170:8888/api/feedback",
+        StartCoroutine(SendReviewOnAPI("http://192.168.0.240:8888/api/feedback",
             first.text, second.text, markReview.Value));
         
     }
@@ -47,6 +47,11 @@ public class SendReview : MonoBehaviour
     }
     IEnumerator SendReviewOnAPI(string url, string _name, string _text, int _rating)
     {
+        if(_rating == 0)
+        {
+            _rating = 5;
+        }
+
         WWWForm formData = new WWWForm();
         AnswerStruct answer = new AnswerStruct()
         {
@@ -68,9 +73,10 @@ public class SendReview : MonoBehaviour
             Debug.Log("Error with Sendind Answer");
             request.Dispose();
         }
-        
+
         GoOnWindow();
         ReviewAnswer(Answer, Canvas);
+        request.Dispose();
     }
 
 }

@@ -28,7 +28,7 @@ public class FiltersLogic : MonoBehaviour
     GameObject[] filters = new GameObject[3];
 
     PosterLoad loader;
-    DateTime date = DateTime.Now;
+    DateTime date;
 
     [SerializeField] GameObject imageZero;
     private void Start()
@@ -38,6 +38,7 @@ public class FiltersLogic : MonoBehaviour
     public void OnStart()
     {
         loader = Content.GetComponent<PosterLoad>();
+        date = DateTime.Now;
         int indexMonth = date.Month;
         for (int i = 0; i < 3; i++)
         {

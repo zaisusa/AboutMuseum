@@ -8,33 +8,48 @@ public class MapLogic : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] Sprite[] ButtonStyles;
     [SerializeField] GameObject[] Floors;
+    static GameObject[] _floors;
 
     [SerializeField] Button backBtn;
     [SerializeField] GameObject ThisWindow;
     [SerializeField] GameObject StartWindow;
 
-    
+    int indexStyle = 1;
+    [SerializeField] Button firstFloor;
+
+
     private void Start()
     {
+        _floors = new GameObject[4]
+        {
+            Floors[0],Floors[1],Floors[2],Floors[3]
+        };
         //backBtn = transform.Find("MapFloors/BackBtn").GetComponent<Button>();
         backBtn.onClick.AddListener(delegate { CloseFloors(null); GoOnWindow(); });
     }
+    public void SetIndexStyle(int index)
+    {
+        indexStyle = index;
+    }
     public void OpenFloor(Button floorBtn)
     {
-        OpenAndCloseButton(floorBtn); 
+        OpenAndCloseButton(floorBtn, indexStyle);
     }
-    void OpenAndCloseButton(Button floorBtn)
+    void OpenAndCloseButton(Button floorBtn, int indexStyle)
     {
         var floor = floorBtn.GetComponent<Floor>();
         bool _isOpen = floor.isOpen;
         if (_isOpen)
         {
-            SwapStyles(floorBtn, 0, false);
+            return;
+            //SwapStyles(floorBtn, 0, false);
+            //SetIndexStyle(1);
+            //OpenFloor(firstFloor);
         }
         else
         {
             CloseFloors(floorBtn);
-            SwapStyles(floorBtn, 1, true);
+            SwapStyles(floorBtn, indexStyle, true);
         }
     }
 
@@ -60,8 +75,48 @@ public class MapLogic : MonoBehaviour
             }
         }
 
+
     }
 #nullable disable
+    #region Blocking Activities
+    void SerializeExpositions()
+    {
+        foreach (var floor in Floors)
+        {
+            Floor floorComp = floor.GetComponent<Floor>();
+            var mapExp = floorComp.FloorOnMap;
+        }
+    }
+    static public GameObject[] GetAllChildrens(GameObject gameObject)
+    {
+        int count = gameObject.transform.childCount;
+        GameObject[] childrens = new GameObject[count];
+        for (int i = 0; i < count; i++)
+        {
+            childrens[i] = gameObject.transform.GetChild(i).gameObject;
+        }
+        return childrens;
+    }
+    public static void BlockActivity(bool _isOn)
+    {
+        foreach (var floor in _floors)
+        {
+            Floor floorComp = floor.GetComponent<Floor>();
+            BlockFloor(floorComp, _isOn);
+        }
+    }
+    private static void BlockFloor(Floor floor, bool _isOn)
+    {
+        foreach(var exp in floor.ContentOnMap)
+        {
+            exp.GetComponent<Button>().interactable = _isOn;
+        }
+        foreach (var exp in floor.ContentOnNav)
+        {
+            exp.GetComponent<Toggle>().interactable = _isOn;
+        }
+    }
+    #endregion
     public void GoOnWindow()
     {
         StartWindow.SetActive(true);

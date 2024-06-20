@@ -8,7 +8,10 @@ public class ExcursionToggles : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] GameObject ExcursionOnMap;
-    [SerializeField] GameObject BriefInfoPrefab;
+#nullable enable
+    [SerializeField] GameObject? BriefInfoPrefab;
+#nullable disable
+
     [SerializeField] Transform PlaceOfBrief;
 
     Exposition needExposition;
@@ -37,6 +40,8 @@ public class ExcursionToggles : MonoBehaviour
             needExposition.SwipeSprite();
             SwapColorText();
             OpenBriefInfo();
+            MapLogic.BlockActivity(false);
+            StartCoroutine(UnBlockActivities());
         }
         //if (ExcursionOnMap.activeSelf)
         //{
@@ -51,14 +56,18 @@ public class ExcursionToggles : MonoBehaviour
     }
     void OpenBriefInfo()
     {
-        BriefInfoWindow = Instantiate(BriefInfoPrefab);
-        BriefInfoWindow.transform.SetParent(PlaceOfBrief);
-        BriefInfoWindow.GetComponent<RectTransform>().offsetMax = new Vector2(-72f, -80f);
-        BriefInfoWindow.GetComponent<RectTransform>().offsetMin = new Vector2(840f, 666f);
+        if (BriefInfoPrefab)
+        {
+            BriefInfoWindow = Instantiate(BriefInfoPrefab);
+            BriefInfoWindow.transform.SetParent(PlaceOfBrief);
+            BriefInfoWindow.GetComponent<RectTransform>().offsetMax = new Vector2(-72f, -80f);
+            BriefInfoWindow.GetComponent<RectTransform>().offsetMin = new Vector2(840f, 666f);
 
 
-        BriefInfoWindow.GetComponent<BriefInfo>().FillingText(needExposition.expositionInfo.Name,
-            needExposition.expositionInfo.BriefInfo, needExposition.expositionInfo.Image);
+            BriefInfoWindow.GetComponent<BriefInfo>().FillingText(needExposition.expositionInfo.Name,
+                needExposition.expositionInfo.BriefInfo, needExposition.expositionInfo.Image);
+        }
+        else return;
     }
     public void CloseBriefInfo()
     {
@@ -68,7 +77,7 @@ public class ExcursionToggles : MonoBehaviour
     void Initialization()
     {
         textExp = transform.Find("Text (TMP)").GetComponent<TMP_Text>();
-        textExp.text = needExposition.expositionInfo.Name;
+        if (BriefInfoPrefab) textExp.text = needExposition.expositionInfo.Name;
 
     }
     void SwapColorText()
@@ -82,6 +91,10 @@ public class ExcursionToggles : MonoBehaviour
             textExp.color = Color.black;
         }
     }
-    // Update is called once per frame
+    IEnumerator UnBlockActivities()
+    {
+        yield return new WaitForSeconds(0.3f);
+        MapLogic.BlockActivity(true);
+    }
     
 }
